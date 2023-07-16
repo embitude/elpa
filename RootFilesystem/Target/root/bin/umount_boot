@@ -1,0 +1,18 @@
+#!/bin/sh
+
+BOOT=/boot
+
+# / is needed after ${BOOT} in the mountpoint check below
+# if ${BOOT} has been changed to a link (mounted from eMMC)
+# and then mounted from uSD
+if (mountpoint -q ${BOOT}/) # Mounted from uSD
+then
+	umount ${BOOT}
+else # Not mounted or link connected from eMMC
+	if [ -L ${BOOT} ] # Link connected from eMMC
+	then
+		rm -fr ${BOOT}
+		mkdir ${BOOT}
+		umount_emmc
+	fi
+fi

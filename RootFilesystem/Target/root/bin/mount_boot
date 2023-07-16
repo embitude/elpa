@@ -1,0 +1,15 @@
+#!/bin/sh -e
+
+BOOT=/boot
+
+USD=$(ls /sys/bus/mmc/devices/mmc0*/block 2> /dev/null || echo "unavailable")
+if [ "${USD}" != "unavailable" ] # Have a uSD - possibly booted from it
+then
+	mount /dev/${USD}p1 ${BOOT}
+else # W/o a uSD - setup BBB's internal eMMC boot partition
+	mount_emmc
+
+	EMMCBOOT=/emmc_boot
+	rmdir ${BOOT}
+	ln -s ${EMMCBOOT} ${BOOT}
+fi

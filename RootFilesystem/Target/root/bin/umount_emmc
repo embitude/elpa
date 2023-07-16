@@ -1,0 +1,19 @@
+#!/bin/sh
+
+EMMCROOT=/emmc_root
+EMMCBOOT=/emmc_boot
+
+if (mountpoint -q ${EMMCBOOT}) # Mounted
+then
+	umount ${EMMCBOOT}
+	rmdir ${EMMCBOOT}
+else # Not mounted or stray case - clean it up
+	rm -fr ${EMMCBOOT}
+fi
+if (mountpoint -q ${EMMCROOT}) # Mounted
+then
+	umount ${EMMCROOT}
+	rmdir ${EMMCROOT}
+else # Not mounted or link connected or stray case - clean it up
+	rm -fr ${EMMCROOT}
+fi
